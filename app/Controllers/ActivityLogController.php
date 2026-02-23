@@ -17,24 +17,24 @@ class ActivityLogController extends BaseController
         $date = $this->request->getGet('date');
 
         $builder = $activityLogModel
-            ->select('activity_log.*, user.nama, user.email')
-            ->join('user', 'user.id_user = activity_log.id_user', 'left')
-            ->orderBy('activity_log.created_at', 'DESC');
+            ->select('activity_logs.*, user.nama, user.email')
+            ->join('user', 'user.id_user = activity_logs.id_user', 'left')
+            ->orderBy('activity_logs.created_at', 'DESC');
 
         if ($keyword) {
             $builder->groupStart()
-                ->like('activity_log.activity', $keyword)
+                ->like('activity_logs.activity', $keyword)
                 ->orLike('user.nama', $keyword)
                 ->orLike('user.email', $keyword)
                 ->groupEnd();
         }
 
         if ($role) {
-            $builder->where('activity_log.role_user', $role);
+            $builder->where('activity_logs.role_user', $role);
         }
 
         if ($date) {
-            $builder->where('DATE(activity_log.created_at)', $date);
+            $builder->where('DATE(activity_logs.created_at)', $date);
         }
 
         $data = [
@@ -46,7 +46,7 @@ class ActivityLogController extends BaseController
             'date'     => $date
         ];
 
-        return view('activity_log/index', $data);
+        return view('activity_log/index.php', $data);
     }
 
     public function clear()

@@ -63,6 +63,9 @@ $routes->group('peminjaman', function($routes) {
     // PETUGAS (CEK DETAIL PENGEMBALIAN)
     $routes->get('cek-pengembalian/(:num)', 'PeminjamanController::cekPengembalian/$1');
 
+    // PETUGAS (CETAK LAPORAN PENGEMBALIAN)
+    $routes->get('cetak-laporan/(:num)', 'PeminjamanController::cetakLaporan/$1');
+
     // PETUGAS (VALIDASI PENGEMBALIAN)
     $routes->post('selesai/(:num)', 'PeminjamanController::selesai/$1');
 

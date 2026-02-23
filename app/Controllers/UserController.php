@@ -10,6 +10,11 @@ class UserController extends BaseController
 {
     public function index()
     {
+        // Hanya Admin yang bisa akses
+        if (session()->get('role') !== 'Admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak! Hanya Admin yang dapat mengelola data user.');
+        }
+
         $userModel = new UserModel();
         $data['users'] = $userModel->findAll();
 
@@ -18,11 +23,21 @@ class UserController extends BaseController
 
     public function create()
     {
+        // Hanya Admin yang bisa akses
+        if (session()->get('role') !== 'Admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         return view('user/create');
     }
 
     public function store()
     {
+        // Hanya Admin yang bisa akses
+        if (session()->get('role') !== 'Admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         $userModel = new UserModel();
 
         $id = $userModel->insert([
@@ -41,6 +56,11 @@ class UserController extends BaseController
 
     public function edit($id)
     {
+        // Hanya Admin yang bisa akses
+        if (session()->get('role') !== 'Admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         $userModel = new UserModel();
         $data['user'] = $userModel->find($id);
 
@@ -49,6 +69,11 @@ class UserController extends BaseController
 
     public function update($id)
     {
+        // Hanya Admin yang bisa akses
+        if (session()->get('role') !== 'Admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         $userModel = new UserModel();
 
         $user = $userModel->find($id);
@@ -64,6 +89,11 @@ class UserController extends BaseController
 
     public function delete($id)
     {
+        // Hanya Admin yang bisa akses
+        if (session()->get('role') !== 'Admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         $userModel = new UserModel();
         $user = $userModel->find($id);
 

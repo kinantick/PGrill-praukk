@@ -265,4 +265,47 @@ class PeminjamanController extends BaseController
 
         return redirect()->to('/peminjaman')->with('success', $message);
     }
+
+    public function cetakLaporan($id)
+    {
+        if (session()->get('role') !== 'Petugas') {
+            return redirect()->to('/dashboard');
+        }
+
+        $peminjamanModel = new PeminjamanModel();
+
+        $data['peminjaman'] = $peminjamanModel
+            ->select('peminjaman.*, alat.nama_alat, category.nama_category, user.nama, user.email')
+            ->join('alat', 'alat.id_alat = peminjaman.id_alat')
+            ->join('category', 'category.id_category = alat.id_category', 'left')
+            ->join('user', 'user.id_user = peminjaman.id_user')
+            ->where('peminjaman.id_peminjaman', $id)
+            ->first();
+
+        if (!$data['peminjaman'] || $data['peminjaman']['status'] !== 'Dikembalikan') {
+            return redirect()->to('/peminjaman');
+        }
+
+        // Hitung denda
+        $denda = 0;
+        $hari_terlambat = 0;
+        $tanggal_kembali = $data['peminjaman']['tanggal_kembali'];
+        $tanggal_jatuh_tempo = $data['peminjaman']['tanggal_jatuh_tempo'];
+
+        if ($tanggal_kembali && $tanggal_jatuh_tempo) {
+            $date_kembali = new \DateTime($tanggal_kembali);
+            $date_jatuh_tempo = new \DateTime($tanggal_jatuh_tempo);
+
+            if ($date_kembali > $date_jatuh_tempo) {
+                $interval = $date_jatuh_tempo->diff($date_kembali);
+                $hari_terlambat = $interval->days;
+                $denda = $hari_terlambat * 10000;
+            }
+        }
+
+        $data['denda'] = $denda;
+        $data['hari_terlambat'] = $hari_terlambat;
+
+        return view('peminjaman/cetak_laporan', $data);
+    }
 }

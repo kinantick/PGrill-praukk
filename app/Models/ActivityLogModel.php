@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class ActivityLogModel extends Model
 {
-    protected $table            = 'activity_log';
+    protected $table            = 'activity_logs';
     protected $primaryKey       = 'id_log';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -17,7 +17,7 @@ class ActivityLogModel extends Model
         'role_user',
         'activity',
         'reference_id',
-        'ip_addres',
+        'ip_address',
         'created_at'
     ];
 

@@ -44,9 +44,17 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        log_activity('Logout dari sistem');
+        try {
+            // Log activity sebelum destroy session
+            log_activity('Logout dari sistem');
+        } catch (\Exception $e) {
+            // Jika log gagal, tetap lanjut logout
+            // Error log tidak boleh menghalangi logout
+        }
         
+        // Destroy session
         session()->destroy();
+        
         return redirect()->to('/');
     }
 

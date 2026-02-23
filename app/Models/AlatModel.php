@@ -36,6 +36,7 @@ class AlatModel extends Model
             $builder->groupStart()
                 ->like('nama_alat', $keyword)
                 ->orLike('status', $keyword)
+                ->orLike('kondisi', $keyword)
                 ->groupEnd();
         }
 

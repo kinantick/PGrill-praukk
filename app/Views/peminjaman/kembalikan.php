@@ -122,6 +122,9 @@
 
                         <form action="/peminjaman/selesai/<?= $peminjaman['id_peminjaman'] ?>" method="post">
                             <div class="d-grid gap-2">
+                                <a href="/peminjaman/cetak-laporan/<?= $peminjaman['id_peminjaman'] ?>" class="btn btn-primary btn-lg" target="_blank">
+                                    <i class="bi bi-printer"></i> Cetak Laporan
+                                </a>
                                 <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Validasi pengembalian ini?')">
                                     <i class="bi bi-check-circle"></i> Validasi & Selesaikan
                                 </button>

@@ -73,7 +73,10 @@
                                             <td><small><?= $p['durasi_pinjam'] ?? '-' ?> hari</small></td>
                                             <td><small><?= date('d/m/Y', strtotime($p['tanggal_pinjam'])) ?></small></td>
                                             <td>
-                                                <?php if ($p['tanggal_jatuh_tempo']): ?>
+                                                <?php 
+                                                // Cek apakah tanggal valid
+                                                if ($p['tanggal_jatuh_tempo'] && $p['tanggal_jatuh_tempo'] != '0000-00-00' && strtotime($p['tanggal_jatuh_tempo']) > 0): 
+                                                ?>
                                                     <small><?= date('d/m/Y', strtotime($p['tanggal_jatuh_tempo'])) ?></small>
                                                     <?php
                                                     // Cek apakah sudah lewat jatuh tempo dan masih dipinjam
@@ -85,7 +88,16 @@
                                                     <small>-</small>
                                                 <?php endif; ?>
                                             </td>
-                                            <td><small><?= $p['tanggal_kembali'] ? date('d/m/Y', strtotime($p['tanggal_kembali'])) : '-' ?></small></td>
+                                            <td>
+                                                <?php 
+                                                // Cek apakah tanggal valid (bukan NULL, bukan 0000-00-00, dan bukan tanggal invalid)
+                                                if ($p['tanggal_kembali'] && $p['tanggal_kembali'] != '0000-00-00' && strtotime($p['tanggal_kembali']) > 0): 
+                                                ?>
+                                                    <small><?= date('d/m/Y', strtotime($p['tanggal_kembali'])) ?></small>
+                                                <?php else: ?>
+                                                    <span class="text-muted">-</span>
+                                                <?php endif; ?>
+                                            </td>
                                             <td>
                                                 <?php
                                                 $badge = match($p['status']) {
@@ -98,6 +110,14 @@
                                                 };
                                                 ?>
                                                 <span class="badge <?= $badge ?>"><?= $p['status'] ?></span>
+                                                
+                                                <?php if ($p['status'] === 'Ditolak' && !empty($p['keterangan_ditolak'])): ?>
+                                                    <br>
+                                                    <small class="text-danger">
+                                                        <i class="bi bi-info-circle"></i> 
+                                                        <?= esc($p['keterangan_ditolak']) ?>
+                                                    </small>
+                                                <?php endif; ?>
                                             </td>
                                             <td>
                                                 <?php if ($p['denda'] > 0): ?>
